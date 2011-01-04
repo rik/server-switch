@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Bookmark generator to switch between different versions of a website (production, stage, working directory, etc)</title>
+    <style>
+input {
+    display: block;
+}
+    </style>
+</head>
+<form>
+    <input id="bookmark-title" placeholder="Switch example.com">
+    <input class="domain" placeholder="www.example.com">
+    <input class="domain" placeholder="stage.example.com">
+    <input class="domain" placeholder="example.local">
+    <input type="submit" value="Generate boorkmarklet">
+</form>
+<script>
+function generateBookarklet(e) {
+    e.preventDefault();
+    // get all input,
+    var domains = [];
+    var domainsInput = document.querySelectorAll('input.domain');
+    for (var i=0, il=domainsInput.length; i<il; i++) {
+        var domain = domainsInput[i].value;
+        if (domain.length > 0) {
+            domains.push('"' + domain + '"');
+        }
+    }
+    domainArray= '[' + domains.join(',') + ']';
+    
+    // generate bookmark string
+    var bookmarklet = 'javascript:(function(){var domains=' + domainArray + ', \
+loc=window.location, \
+path=loc.pathname+loc.search+loc.hash, \
+url_prefix="http://"; \
+\
+for(var i=0;i<domains.length;i++){ \
+    var index_host=loc.href.indexOf(domains[i]); \
+    if(index_host>=0){ \
+        domains.splice(i,1); \
+        url_prefix=loc.href.slice(0,index_host); \
+    } \
+} \
+/*if(!c){ \
+    return \
+}*/ \
+var ul=document.createElement("ul"); \
+ul.style.position="fixed"; \
+ul.style.zIndex=1000; \
+ul.style.background="#fff"; \
+ul.style.color="#000"; \
+ul.style.border="2px solid #000"; \
+ul.style.top="0"; \
+ul.style.left="0"; \
+ul.style.padding="5px"; \
+for(var i=0;i<domains.length;i++){ \
+    var a=document.createElement("a"); \
+    a.href=url_prefix+domains[i]+path; \
+    a.appendChild(document.createTextNode(domains[i])); \
+    var li=document.createElement("li"); \
+    li.style.display="block"; \
+    li.appendChild(a); \
+    ul.appendChild(li) \
+} \
+document.body.appendChild(ul) \
+})();';
+
+    // generate link to copy.
+    var a = document.createElement('a');
+    a.href = bookmarklet;
+    var title = document.getElementById('bookmark-title').value;
+    if (title.length == 0) {
+        title = "Switch servers";
+    };
+    a.appendChild(document.createTextNode(title));
+    document.body.appendChild(a);
+}
+document.querySelector('form').addEventListener('submit', generateBookarklet, false);
+</script>
+
+
