@@ -2,21 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Bookmark generator to switch between different versions of a website (production, stage, working directory, etc)</title>
+    <title>Bookmarklet generator</title>
     <style>
-input {
+fieldset input, output {
     display: block;
+}
+form, #instructions {
+    float: left;
+    width: 45%;
+    padding: 5px;
+}
+#explanations {
+    border-left: 2px solid #ccc;
+}
+[hidden=true] {
+    display: none;
 }
     </style>
 </head>
+<h1>Bookmarklet generator</h1>
+<p>Switch between different versions of a website (production, stage, working directory, etc)</p>
 <form>
-    <input id="bookmark-title" placeholder="Switch example.com">
-    <input class="domain" placeholder="www.example.com">
-    <input class="domain" placeholder="stage.example.com">
-    <input class="domain" placeholder="example.local">
-    <button type="button">+</button>
+    <label>Bookmark title: <input id="bookmark-title" placeholder="Switch example.com"></label>
+    <fieldset>
+        <legend>Domains</legend>
+        <input class="domain" placeholder="www.example.com">
+        <input class="domain" placeholder="stage.example.com">
+        <input class="domain" placeholder="example.local">
+        <button type="button">+</button>
+    </fieldset>
     <input type="submit" value="Generate boorkmarklet">
+    <output hidden="true">Drag me or copy me: <a href="#"></a></output>
 </form>
+
+<div id="instructions">
+    <p>This will generate a bookmarklet that looks like this:</p>
+    <ul style="display: inline-block; z-index: 1000; background: white; color: black; border: 2px solid black; padding: 5px;">
+        <li style="display: block;">
+            <a href="#">www.example.com</a>
+        </li>
+        <li style="display: block;">
+            <a href="#">stage.example.com</a>
+        </li>
+        <li style="display: block;">
+            <a href="#">example.local</a>
+        </li>
+    </ul>
+    <p>It will take you to the exact same page on another domain.</p>
+    <p>If you have urls in the form <em>user.domain.com</em>, it can switch between <em>user.domain.com</em> and <em>user.stage.domain.com</em>. Just enter <em>domain.com</em> and <em>stage.domain.com</em>. </p>
+</div>
 <script>
 function generateBookarklet(e) {
     e.preventDefault();
@@ -30,7 +64,6 @@ function generateBookarklet(e) {
         }
     }
     domainArray= '[' + domains.join(',') + ']';
-    console.log(domains)
     
     // generate bookmark string
     var bookmarklet = 'javascript:(function(){var domains=' + domainArray + ', \
@@ -70,14 +103,15 @@ document.body.appendChild(ul) \
 })();';
 
     // generate link to copy.
-    var a = document.createElement('a');
+    var output = document.querySelector('output');
+    var a = output.querySelector('a');
     a.href = bookmarklet;
     var title = document.getElementById('bookmark-title').value;
     if (title.length == 0) {
         title = "Switch servers";
     };
-    a.appendChild(document.createTextNode(title));
-    document.body.appendChild(a);
+    a.innerHTML = title;
+    output.removeAttribute('hidden');
 }
 
 function addField(e) {
