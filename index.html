@@ -31,7 +31,7 @@ form, #instructions {
         <input class="domain" placeholder="example.local">
         <button type="button">+</button>
     </fieldset>
-    <input type="submit" value="Generate boorkmarklet">
+    <input type="submit" value="Generate bookmarklet">
     <output hidden="true">Drag me or copy me: <a href="#"></a></output>
 </form>
 
@@ -53,7 +53,7 @@ form, #instructions {
 </div>
 <a href="http://github.com/rik/server-switch"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://assets2.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71?repo=&url=http%3A%2F%2Fs3.amazonaws.com%2Fgithub%2Fribbons%2Fforkme_right_darkblue_121621.png&path=" alt="Fork me on GitHub"></a>
 <script>
-function generateBookarklet(e) {
+function generateBookmarklet(e) {
     e.preventDefault();
     // get all input,
     var domains = [];
@@ -121,7 +121,7 @@ function addField(e) {
     input.placeholder = "another.domain.com";
     e.target.parentNode.insertBefore(input, e.target);
 }
-document.querySelector('form').addEventListener('submit', generateBookarklet, false);
+document.querySelector('form').addEventListener('submit', generateBookmarklet, false);
 document.querySelector('button').addEventListener('click', addField, false);
 </script>
 
